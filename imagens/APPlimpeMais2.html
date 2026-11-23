@@ -1,0 +1,389 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Limpe Mais</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: cabeçalho com botão Início + trilha de 5 telas; uma tela por vez em cartão central; rodapé de navegação Voltar/Continuar */
+:root{
+  --bg:#ffffff; --surface:#ffffff; --sage:#e89bb9; --sage-soft:#fbe3ec;
+  --fg:#2a1520; --muted:#6a5260; --line:#e6c9d5;
+  --accent:#b4235f; --accent-fg:#ffffff; --focus:#1d4ed8;
+  --ok:#1f7a45; --ok-fg:#ffffff; --err:#b42318;
+  --font-display:"Bricolage Grotesque","Inter",system-ui,sans-serif;
+  --font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+/* Visual único: fundo branco e rosa, em qualquer tema do aparelho */
+:root{color-scheme:light}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--font-body);margin:0;
+  padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+.wrap{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.home{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;color:var(--fg)}
+.home svg{width:24px;height:24px}
+.brand{font-family:var(--font-display);font-weight:800;font-size:22px}
+.brand span{color:var(--accent)}
+.steps{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+.step{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--muted);white-space:nowrap}
+.step[aria-current="step"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);font-weight:600}
+.step b{font-variant-numeric:tabular-nums;margin-right:4px}
+
+main{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:clamp(18px,4vw,36px);min-height:460px;display:flex;flex-direction:column;gap:24px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.screen{display:flex;flex-direction:column;gap:20px}
+.screen>h2{font-size:clamp(26px,5vw,38px)}
+.lead{color:var(--muted);max-width:60ch;margin:0}
+
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--accent-fg);border-radius:12px;padding:12px 20px;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+
+/* tela 1 */
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center}
+.hero-art{background:var(--sage-soft);border-radius:18px;aspect-ratio:1/1;display:grid;place-items:center;max-width:100%}
+.hero-art svg{width:62%;height:auto}
+.hero h2{font-size:clamp(34px,7vw,56px);line-height:1.02}
+.hero h2 span{color:var(--accent)}
+.facts{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:13px}
+.facts b{color:var(--fg);display:block;font-size:18px;font-family:var(--font-display)}
+
+/* formulários */
+.tabs{display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;align-self:flex-start}
+.tabs button{border:0;background:transparent;padding:10px 18px;cursor:pointer;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--sage-soft);color:var(--fg);font-weight:600}
+.form{display:grid;gap:14px;max-width:460px}
+.form.two{grid-template-columns:1fr 1fr}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label,.legend{font-size:13px;font-weight:600}
+.field input,.field select{border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:var(--bg);width:100%;min-width:0}
+.radios{display:flex;gap:8px;flex-wrap:wrap}
+.radios label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-weight:400;cursor:pointer}
+.sage{background:var(--sage-soft);border-radius:16px;padding:22px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.social{display:grid;gap:10px;max-width:460px;align-content:start}
+.social button{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px;cursor:pointer;text-align:left}
+.hint{font-size:12.5px;color:var(--muted);margin:0}
+
+/* tela 3 */
+.sched{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.cal{border:1px solid var(--line);border-radius:16px;padding:16px}
+.cal-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.grid7{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.grid7 .dow{font-size:11px;color:var(--muted);text-transform:uppercase;padding:4px 0}
+.day{aspect-ratio:1/1;border:0;border-radius:10px;background:transparent;cursor:pointer;font-variant-numeric:tabular-nums}
+.day:hover:not(:disabled){background:var(--sage-soft)}
+.day:disabled{color:var(--muted);opacity:.4;cursor:not-allowed}
+.day[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);font-weight:700}
+.slots{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 14px;cursor:pointer;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.opts{display:grid;gap:10px}
+.opt{display:flex;justify-content:space-between;gap:12px;text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:14px;padding:14px;cursor:pointer;width:100%}
+.opt[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.opt strong{display:block;font-family:var(--font-display);font-size:17px}
+.opt small{color:var(--muted)}
+.price{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* pagamento / resumo */
+.pay{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.summary{background:var(--sage-soft);border-radius:16px;padding:20px;display:grid;gap:10px}
+.summary dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px}
+.summary dt{color:var(--muted)}
+.summary dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+.total{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:10px;font-family:var(--font-display);font-size:22px;font-weight:700}
+.done{display:grid;place-items:center;width:72px;height:72px;border-radius:50%;background:var(--ok);color:var(--ok-fg)}
+.step.visited{color:var(--ok);border-color:var(--ok)}
+.step.visited b::after{content:" ✓"}
+.status{margin:0;font-size:13px;color:var(--muted);font-weight:500}
+.sel{margin:12px 0 0;font-size:13px;background:var(--sage-soft);border-radius:10px;padding:10px 12px}
+.err{color:var(--err);font-size:12.5px;font-weight:500}
+.err::before{content:"⚠ "}
+.field input[aria-invalid="true"]{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
+.done svg{width:38px;height:38px}
+.code{font-family:ui-monospace,Menlo,monospace;background:var(--bg);border:1px dashed var(--line);border-radius:8px;padding:2px 8px}
+
+footer{display:flex;justify-content:space-between;gap:12px;margin-top:auto}
+
+@media (max-width:700px){
+  .hero,.split,.sched,.pay{grid-template-columns:1fr}
+  .hero-art{max-width:240px}
+  .steps{margin-left:0;width:100%}
+  .form.two{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:no-preference){.screen{animation:in .25s ease-out}@keyframes in{from{opacity:.001;transform:translateY(6px)}to{opacity:1;transform:none}}}
+</style>
+
+<div class="wrap">
+  <header>
+    <button class="home" id="btn-home" aria-label="Ir para a tela inicial" type="button">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3 1.5 12.2h3V21h5.7v-6h3.6v6h5.7v-8.8h3z"/></svg>
+    </button>
+    <div class="brand">Limpe<span>Mais</span></div>
+    <nav class="steps" id="steps" aria-label="Telas"></nav>
+  </header>
+  <p class="status" id="status" aria-live="polite"></p>
+
+  <main>
+    <!-- TELA 1 -->
+    <section class="screen" id="inicio" data-title="Início">
+      <div class="hero">
+        <div style="display:grid;gap:18px">
+          <div class="eyebrow">Limpeza sob demanda</div>
+          <h2>Sua casa limpa, <span>sem esforço.</span></h2>
+          <p class="lead">Escolha o dia, o tipo de limpeza e pague pelo app. Um profissional verificado chega no horário combinado.</p>
+          <div class="row">
+            <button class="btn" data-go="agendar" type="button">Agendar limpeza</button>
+            <button class="btn ghost" data-go="acesso" data-tab="cadastro" type="button">Cadastro</button>
+            <button class="btn ghost" data-go="acesso" data-tab="login" type="button">Entrar</button>
+          </div>
+          <div class="facts"><div><b>3 tipos</b>de limpeza</div><div><b>4 horários</b>por dia</div><div><b>Pix ou cartão</b>no app</div></div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 30 32 10l24 20"/><path d="M14 26v28h36V26"/><path d="M27 54V38h10v16"/><path d="M48 8v6M45 11h6" stroke="var(--sage)"/></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- TELA 2 -->
+    <section class="screen" id="acesso" data-title="Acesso" hidden>
+      <div><div class="eyebrow">Tela 2</div><h2>Entre ou crie sua conta</h2></div>
+      <div class="tabs" role="tablist">
+        <button role="tab" id="tab-login" aria-selected="true" type="button">Entrar</button>
+        <button role="tab" id="tab-cadastro" aria-selected="false" type="button">Cadastrar</button>
+      </div>
+      <div id="pane-login" class="split">
+        <div class="social">
+          <button type="button">Entrar com Google</button>
+          <button type="button">Entrar com Facebook</button>
+        </div>
+        <form class="form" id="form-login" autocomplete="on">
+          <div class="field"><label for="l-user">E-mail ou nome de usuário</label><input id="l-user" type="text" value="maria.silva@email.com"></div>
+          <div class="field"><label for="l-pass">Senha</label><input id="l-pass" type="password" value="exemplo123"></div>
+          <p class="hint">Esqueceu sua senha? Clique aqui.</p>
+        </form>
+      </div>
+      <div id="pane-cadastro" class="sage" hidden>
+        <form class="form two" id="form-cad">
+          <div class="field full"><label for="c-nome">Nome completo</label><input id="c-nome" type="text" placeholder="Maria Silva"></div>
+          <div class="field full"><label for="c-contato">Celular ou e-mail</label><input id="c-contato" type="text" placeholder="(11) 90000-0000"></div>
+          <div class="field full"><label for="c-senha">Senha</label><input id="c-senha" type="password"></div>
+          <div class="field"><label for="c-nasc">Data de nascimento</label><input id="c-nasc" type="date"></div>
+          <div class="field"><span class="legend">Gênero</span>
+            <div class="radios">
+              <label><input type="radio" name="gen" id="g-f"> F</label>
+              <label><input type="radio" name="gen" id="g-m"> M</label>
+              <label><input type="radio" name="gen" id="g-o"> Outro</label>
+            </div></div>
+          <p class="hint full" style="grid-column:1/-1">Ao cadastrar-se, você concorda com os Termos e a Política de Privacidade.</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- TELA 3 -->
+    <section class="screen" id="agendar" data-title="Agendar" hidden>
+      <div><div class="eyebrow">Tela 3</div><h2>Escolha o dia e a limpeza</h2></div>
+      <div class="sched">
+        <div class="cal">
+          <div class="cal-head"><h3>Novembro 2026</h3><span class="hint">Calendário</span></div>
+          <div class="grid7" id="cal"></div>
+          <div class="slots" id="slots" role="group" aria-label="Horários"></div>
+        </div>
+        <div>
+          <div class="legend" style="margin-bottom:10px">Opção de limpeza</div>
+          <div class="opts" id="opts"></div>
+          <p class="sel" id="sel" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TELA 4 -->
+    <section class="screen" id="pagamento" data-title="Pagamento" hidden>
+      <div><div class="eyebrow">Tela 4</div><h2>Forma de pagamento</h2></div>
+      <div class="pay">
+        <div style="display:grid;gap:14px">
+          <div class="opts" id="pays"></div>
+          <form class="form two" id="card-form" hidden>
+            <div class="field full"><label for="k-num">Número do cartão</label><input id="k-num" inputmode="numeric" placeholder="0000 0000 0000 0000"></div>
+            <div class="field"><label for="k-val">Validade</label><input id="k-val" placeholder="MM/AA"></div>
+            <div class="field"><label for="k-cvv">CVV</label><input id="k-cvv" inputmode="numeric" placeholder="123"></div>
+          </form>
+          <p class="hint" id="pay-hint"></p>
+        </div>
+        <div class="summary"><h3>Resumo</h3><div id="sum-pay"></div></div>
+      </div>
+    </section>
+
+    <!-- TELA 5 -->
+    <section class="screen" id="finalizacao" data-title="Finalização" hidden>
+      <div class="done" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></svg></div>
+      <div><div class="eyebrow">Tela 5</div><h2>Limpeza agendada</h2></div>
+      <p class="lead" id="final-msg"></p>
+      <div class="summary" style="max-width:460px"><div id="sum-final"></div></div>
+    </section>
+
+    <footer>
+      <button class="btn ghost" id="btn-back" type="button">Voltar</button>
+      <button class="btn" id="btn-next" type="button">Continuar</button>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  var ORDER=["inicio","acesso","agendar","pagamento","finalizacao"];
+  var OPTS=[
+    {id:"padrao",nome:"Limpeza padrão",desc:"Até 3 horas · cômodos e banheiros",preco:120},
+    {id:"completa",nome:"Limpeza completa",desc:"Até 5 horas · inclui forno, geladeira e janelas",preco:210},
+    {id:"obra",nome:"Pós-obra",desc:"Até 8 horas · remoção de resíduos e poeira fina",preco:340}
+  ];
+  var PAYS=[
+    {id:"pix",nome:"Pix",desc:"Aprovação na hora",hint:"O código Pix aparece após confirmar."},
+    {id:"cartao",nome:"Cartão de crédito",desc:"Em até 3x sem juros",hint:"Dados do cartão de exemplo, nada é enviado."},
+    {id:"dinheiro",nome:"Dinheiro na hora",desc:"Pague ao profissional",hint:"Tenha o valor em mãos no dia."}
+  ];
+  var SLOTS=["08:00","10:00","14:00","16:00"];
+  var DOW=["dom","seg","ter","qua","qui","sex","sáb"];
+  var S={opt:"padrao",day:17,slot:"10:00",pay:"pix",code:""};
+  var cur="inicio";
+  var $=function(id){return document.getElementById(id)};
+  var money=function(n){return "R$ "+n.toFixed(2).replace(".",",")};
+  var opt=function(){return OPTS.filter(function(o){return o.id===S.opt})[0]};
+  var pay=function(){return PAYS.filter(function(p){return p.id===S.pay})[0]};
+  var dateLabel=function(){
+    var d=new Date(2026,10,S.day);
+    return DOW[d.getDay()]+", "+S.day+" de novembro às "+S.slot;
+  };
+
+  // trilha
+  var stepsEl=$("steps");
+  ORDER.forEach(function(id,i){
+    var b=document.createElement("button");
+    b.type="button";b.className="step";b.dataset.id=id;
+    b.innerHTML="<b>"+(i+1)+"</b>"+$(id).dataset.title;
+    b.addEventListener("click",function(){go(id)});
+    stepsEl.appendChild(b);
+  });
+
+  // calendário (nov/2026 começa no domingo)
+  function drawCal(){
+    var h=DOW.map(function(d){return '<div class="dow">'+d+'</div>'}).join("");
+    var first=new Date(2026,10,1).getDay();
+    for(var i=0;i<first;i++)h+="<div></div>";
+    for(var d=1;d<=30;d++){
+      h+='<button type="button" class="day" data-day="'+d+'" aria-pressed="'+(d===S.day)+'"'+(d<13?" disabled":"")+">"+d+"</button>";
+    }
+    $("cal").innerHTML=h;
+    $("sel").innerHTML="<b>Selecionado:</b> "+opt().nome+" · "+dateLabel()+" · "+money(opt().preco);
+    $("slots").innerHTML=SLOTS.map(function(s){return '<button type="button" class="chip" data-slot="'+s+'" aria-pressed="'+(s===S.slot)+'">'+s+"</button>"}).join("");
+    $("opts").innerHTML=OPTS.map(function(o){return '<button type="button" class="opt" data-opt="'+o.id+'" aria-pressed="'+(o.id===S.opt)+'"><span><strong>'+o.nome+"</strong><small>"+o.desc+'</small></span><span class="price">'+money(o.preco)+"</span></button>"}).join("");
+  }
+  function drawPays(){
+    $("pays").innerHTML=PAYS.map(function(p){return '<button type="button" class="opt" data-pay="'+p.id+'" aria-pressed="'+(p.id===S.pay)+'"><span><strong>'+p.nome+"</strong><small>"+p.desc+"</small></span></button>"}).join("");
+    $("card-form").hidden=S.pay!=="cartao";
+    $("pay-hint").textContent=pay().hint;
+    $("sum-pay").innerHTML=summary();
+  }
+  function summary(){
+    var o=opt();
+    return '<dl><dt>Serviço</dt><dd>'+o.nome+'</dd><dt>Quando</dt><dd>'+dateLabel()+'</dd><dt>Pagamento</dt><dd>'+pay().nome+'</dd></dl><div class="total"><span>Total</span><span>'+money(o.preco)+"</span></div>";
+  }
+
+  document.addEventListener("click",function(e){
+    var t=e.target.closest("button");if(!t)return;
+    if(t.dataset.day){S.day=+t.dataset.day;drawCal()}
+    else if(t.dataset.slot){S.slot=t.dataset.slot;drawCal()}
+    else if(t.dataset.opt){S.opt=t.dataset.opt;drawCal()}
+    else if(t.dataset.pay){S.pay=t.dataset.pay;drawPays()}
+    else if(t.dataset.go){go(t.dataset.go);if(t.dataset.tab)tab(t.dataset.tab)}
+  });
+
+  function tab(which){
+    var login=which==="login";
+    $("tab-login").setAttribute("aria-selected",login);
+    $("tab-cadastro").setAttribute("aria-selected",!login);
+    $("pane-login").hidden=!login;
+    $("pane-cadastro").hidden=login;
+  }
+  $("tab-login").addEventListener("click",function(){tab("login")});
+  $("tab-cadastro").addEventListener("click",function(){tab("cadastro")});
+
+  function go(id){
+    if(ORDER.indexOf(id)<0)id="inicio";
+    if(id==="finalizacao"&&!S.code)S.code="LM-"+String(Math.floor(1000+Math.random()*9000));
+    cur=id;
+    ORDER.forEach(function(s){$(s).hidden=s!==id});
+    Array.prototype.forEach.call(stepsEl.children,function(b){
+      var bi=ORDER.indexOf(b.dataset.id);
+      b.classList.toggle("visited",bi<ORDER.indexOf(id));
+      if(b.dataset.id===id)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");
+    });
+    $("status").textContent="Passo "+(ORDER.indexOf(id)+1)+" de 5 · "+$(id).dataset.title;
+    if(id==="pagamento")drawPays();
+    if(id==="finalizacao"){
+      $("final-msg").innerHTML="Seu pedido <span class='code'>"+S.code+"</span> está confirmado. Enviamos os detalhes para o seu contato.";
+      $("sum-final").innerHTML=summary();
+    }
+    var i=ORDER.indexOf(id);
+    $("btn-back").style.visibility=i===0?"hidden":"visible";
+    var next=$("btn-next");
+    next.textContent=id==="inicio"?"Começar":id==="pagamento"?"Confirmar pedido":id==="finalizacao"?"Nova limpeza":"Continuar";
+    if(location.hash!=="#"+id)history.replaceState(null,"","#"+id);
+    window.scrollTo(0,0);
+  }
+  $("btn-home").addEventListener("click",function(){go("inicio")});
+  $("btn-back").addEventListener("click",function(){go(ORDER[Math.max(0,ORDER.indexOf(cur)-1)])});
+  $("btn-next").addEventListener("click",function(){
+    if(cur==="finalizacao"){S.code="";S.day=17;S.slot="10:00";S.opt="padrao";S.pay="pix";drawCal();go("inicio");return}
+    if(!validate(cur))return;
+    go(ORDER[ORDER.indexOf(cur)+1]);
+  });
+
+  // validação com mensagem junto ao campo (Nielsen: ajudar a reconhecer e corrigir erros)
+  function fieldErr(id,msg){
+    var el=$(id),f=el.closest(".field"),s=f.querySelector(".err");
+    if(msg){
+      if(!s){s=document.createElement("span");s.className="err";s.setAttribute("role","alert");f.appendChild(s)}
+      s.textContent=msg;el.setAttribute("aria-invalid","true");
+    }else{if(s)s.remove();el.removeAttribute("aria-invalid")}
+    return !msg;
+  }
+  function validate(id){
+    var r=[];
+    if(id==="acesso"){
+      if(!$("pane-login").hidden){
+        r.push(fieldErr("l-user",$("l-user").value.trim()?"":"Informe seu e-mail ou nome de usuário."));
+        r.push(fieldErr("l-pass",$("l-pass").value?"":"Informe sua senha."));
+      }else{
+        r.push(fieldErr("c-nome",$("c-nome").value.trim().length>=3?"":"Digite seu nome completo."));
+        r.push(fieldErr("c-contato",$("c-contato").value.trim().length>=8?"":"Informe um celular ou e-mail válido."));
+        r.push(fieldErr("c-senha",$("c-senha").value.length>=6?"":"Use pelo menos 6 caracteres."));
+      }
+    }else if(id==="pagamento"&&S.pay==="cartao"){
+      r.push(fieldErr("k-num",/^\d{13,19}$/.test($("k-num").value.replace(/\s/g,""))?"":"Digite os dígitos do cartão (13 a 19 números)."));
+      r.push(fieldErr("k-val",/^(0[1-9]|1[0-2])\/\d{2}$/.test($("k-val").value.trim())?"":"Use o formato MM/AA."));
+      r.push(fieldErr("k-cvv",/^\d{3,4}$/.test($("k-cvv").value.trim())?"":"Digite 3 ou 4 números."));
+    }
+    var bad=document.querySelector("#"+id+" [aria-invalid='true']");
+    if(bad){bad.focus();return false}
+    return true;
+  }
+  document.addEventListener("input",function(e){
+    if(e.target.getAttribute&&e.target.getAttribute("aria-invalid")==="true")fieldErr(e.target.id,"");
+  });
+  window.addEventListener("hashchange",function(){go(location.hash.slice(1))});
+
+  drawCal();drawPays();
+  go(location.hash.slice(1)||"inicio");
+})();
+</script>
+
+</body></html>
